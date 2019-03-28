@@ -11,7 +11,7 @@ namespace PLLUGTask2Recursion
         private static readonly Dictionary<ulong, ulong> MemorizedSequence = new Dictionary<ulong, ulong>();
       
         // Recursion method
-        internal ulong GetFibonacciSequencebyAmount(ulong number)
+        internal ulong GetFibonacciSequencebyAmountMy(ulong number)
         {
             if (number == 0 || number == 1)
             {
@@ -28,23 +28,35 @@ namespace PLLUGTask2Recursion
             {
                 return MemorizedSequence[number];
             }
-            ulong result = GetFibonacciSequencebyAmount(number);
+            ulong result = GetFibonacciSequencebyAmountMy(number);
             MemorizedSequence.Add(number, result);
             return result;
+        }
+     
+        public ulong GetFibonacciSequencebyAmountSuggested(ulong a, ulong b, ulong counter, ulong number)
+        {
+
+            if (counter < number)
+            {
+                return GetFibonacciSequencebyAmountSuggested(b, a + b, counter + 1, number);
+            }
+            return b;
+    
         }
 
         public List<ulong> GetFibonacciSequenceByNumber(ulong number)
         {
             uint counter = 0;
             List<ulong> sequence = new List<ulong>();
-            while (GetFibonacciSequencebyAmount(counter) <= number)
+            while (GetFibonacciSequencebyAmountMy(counter) <= number)
             {
                 counter++;
-                sequence.Add(GetFibonacciSequencebyAmount(counter));
-               
+                sequence.Add(GetFibonacciSequencebyAmountMy(counter));
+
             }
-            sequence.Remove(GetFibonacciSequencebyAmount(counter));
+            sequence.Remove(GetFibonacciSequencebyAmountMy(counter));
             return sequence;
         }
+
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace PLLUGTask2Recursion
 {
@@ -20,6 +21,7 @@ namespace PLLUGTask2Recursion
     /// </summary>
     public partial class MainWindow : Window
     {
+        Stopwatch stopwatch = new Stopwatch();
         public MainWindow()
         {
             InitializeComponent();
@@ -30,15 +32,37 @@ namespace PLLUGTask2Recursion
         {
             ClearOutput();
             Fibonacci fiboNumber = new Fibonacci();
-            if (RadioButtonByAmount.IsChecked == true)
+            stopwatch.Reset();
+            if (RadioButtonByAmountMy.IsChecked == true)
             {
                 try
                 {
+                    stopwatch.Start();
                     for (ulong i = 1; i <= ulong.Parse(textboxInput.Text); i++)
                     {
                         RichTextBoxOutput.Document.Blocks.Add
-                            (new Paragraph(new Run(fiboNumber.GetFibonacciSequencebyAmount(i).ToString())));
+                            (new Paragraph(new Run(fiboNumber.GetFibonacciSequencebyAmountMy(i).ToString())));
                     }
+                    stopwatch.Stop();
+                    MessageBox.Show(stopwatch.ElapsedMilliseconds.ToString() + " ms", "My Algorithm", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else if (RadioButtonByAmountSuggested.IsChecked == true)
+            {
+                try
+                {
+                    stopwatch.Start();
+                    for (ulong i = 1; i <= ulong.Parse(textboxInput.Text); i++)
+                    {
+                        RichTextBoxOutput.Document.Blocks.Add
+                            (new Paragraph(new Run(fiboNumber.GetFibonacciSequencebyAmountSuggested(0, 1, 1, i).ToString())));
+                    }
+                    stopwatch.Stop();
+                    MessageBox.Show(stopwatch.ElapsedMilliseconds.ToString() + " ms", "Suggested Algorithm", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -61,19 +85,29 @@ namespace PLLUGTask2Recursion
             }
         }
 
-        private void RadioButtonByAmount_Checked(object sender, RoutedEventArgs e)
+        private void RadioButtonByAmountMy_Checked(object sender, RoutedEventArgs e)
         {
-            if (RadioButtonByNumber != null)
+            if (RadioButtonByNumber != null && RadioButtonByAmountSuggested != null)
             {
                 RadioButtonByNumber.IsChecked = false;
+                RadioButtonByAmountSuggested.IsChecked = false;
             }
         }
 
         private void RadioButtonByNumber_Checked(object sender, RoutedEventArgs e)
         {
-            if (RadioButtonByAmount != null)
+            if (RadioButtonByAmountMy != null && RadioButtonByAmountSuggested != null)
             {
-                RadioButtonByAmount.IsChecked = false;
+                RadioButtonByAmountMy.IsChecked = false;
+                RadioButtonByAmountSuggested.IsChecked = false;
+            }
+        }
+        private void RadioButtonByAmountSuggested_Checked(object sender, RoutedEventArgs e)
+        {
+            if (RadioButtonByAmountMy != null  && RadioButtonByNumber != null)
+            {
+                RadioButtonByNumber.IsChecked = false;
+                RadioButtonByAmountMy.IsChecked = false;
             }
         }
 
